@@ -1,34 +1,58 @@
-from django import forms
-from django.forms.utils import ErrorList
-from django.views.generic import DetailView, ListView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy, reverse
+from django.db.models import Q
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView
+    )
+
 from .forms import TweetModelForm
-from .mixins import FormUserNeededMixin
+from .mixins import FormUserNeededMixin, UserOwnerMixin
 from .models import Tweet
 
 
 class TweetCreateView(FormUserNeededMixin, CreateView):
     form_class = TweetModelForm
     template_name = "tweets/create_view.html"
-    success_url = "/tweet/create/"
-
-    # def form_valid(self, form):
-    #     if self.request.user.is_authenticated():
-    #         form.instance.user = self.request.user
-    #         return super(TweetCreateView, self).form_valid(form)
-    #     else:
-    #         form._errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(["User must be logged in to continue"])
-    #         return self.form_invalid(form)
 
 
 class TweetDetailView(DetailView):
-    template_name = "tweets/detail_view.html"
     queryset = Tweet.objects.all()
+    template_name = "tweets/detail_view.html"
 
 
 class TweetListView(ListView):
-    template_name = "tweets/list_view.html"
     queryset = Tweet.objects.all()
+    template_name = "tweets/tweet_list.html"
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = Tweet.objects.all()
+        query = self.request.GET.get("q", None)
+        if query is not None:
+            queryset = queryset.filter(
+                Q(content__icontains=query) |
+                Q(user__username__icontains=query)
+                )
+        return queryset
 
     def get_context_data(self, *args, **kwargs):
         context = super(TweetListView, self).get_context_data(*args, **kwargs)
+        context["create_form"] = TweetModelForm()
+        context["create_url"] = reverse_lazy("tweet:create")
         return context
+
+
+class TweetUpdateView(LoginRequiredMixin, UserOwnerMixin, UpdateView):
+    queryset = Tweet.objects.all()
+    template_name = "tweets/update_view.html"
+    form_class = TweetModelForm
+    success_url = "/tweet/"
+
+
+class TweetDeleteView(LoginRequiredMixin, DeleteView):
+    queryset = Tweet.objects.all()
+    template_name = "tweets/delete_confirm.html"
+    success_url = reverse_lazy('tweet:list')
