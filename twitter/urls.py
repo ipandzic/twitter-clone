@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
+from accounts.views import UserRegisterView
 from tweets.views import TweetListView
 
 from .views import home
@@ -26,9 +27,11 @@ from .views import home
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', TweetListView.as_view(), name='home'),
+    url(r'^', include('django.contrib.auth.urls')),
     url(r'^profiles/', include('accounts.urls', namespace='profiles')),
     url(r'^tweet/', include('tweets.urls', namespace='tweet')),
     url(r'^api/tweet/', include('tweets.api.urls', namespace='tweet-api')),
+    url(r'^register/$', UserRegisterView.as_view(), name='register'),
 ]
 
 if settings.DEBUG:

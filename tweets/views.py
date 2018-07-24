@@ -24,7 +24,7 @@ class TweetDetailView(DetailView):
     template_name = "tweets/detail_view.html"
 
 
-class TweetListView(ListView):
+class TweetListView(LoginRequiredMixin, ListView):
     queryset = Tweet.objects.all()
     template_name = "tweets/tweet_list.html"
 
@@ -32,7 +32,7 @@ class TweetListView(ListView):
         im_following = self.request.user.profile.get_following()
         qs1 = Tweet.objects.filter(user__in=im_following)
         qs2 = Tweet.objects.filter(user=self.request.user)
-        qs = (qs1 | qs2)
+        qs = (qs1 | qs2).distinct()
         return qs
 
     def get_context_data(self, *args, **kwargs):
