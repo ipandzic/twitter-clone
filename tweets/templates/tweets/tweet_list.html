@@ -30,7 +30,7 @@
               <div class="media-body">
                 <h4 class="media-heading">{{ object.content }}</h4>
 
-                Tweet by: {{ object.user }} <br/>
+                Tweet by: <a href="profiles/{{ object.user }}">{{ object.user }}</a><br/>
                 Tweet time: {{ object.timestamp }}
                 | <a href="{{ object.get_absolute_url }}">View</a>
                 </p>

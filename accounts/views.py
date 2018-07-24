@@ -10,4 +10,7 @@ class UserDetailView(DetailView):
     queryset = User.objects.all()
 
     def get_object(self):
-        return get_object_or_404(User, username__iexact=self.kwargs.get("username"))
+        return get_object_or_404(
+            User,
+            username__iexact=self.kwargs.get("username")
+            )
