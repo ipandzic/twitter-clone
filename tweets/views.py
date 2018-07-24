@@ -28,15 +28,12 @@ class TweetListView(ListView):
     queryset = Tweet.objects.all()
     template_name = "tweets/tweet_list.html"
 
-    def get_queryset(self, *args, **kwargs):
-        queryset = Tweet.objects.all()
-        query = self.request.GET.get("q", None)
-        if query is not None:
-            queryset = queryset.filter(
-                Q(content__icontains=query) |
-                Q(user__username__icontains=query)
-                )
-        return queryset
+    def get_queryset(self):
+        im_following = self.request.user.profile.get_following()
+        qs1 = Tweet.objects.filter(user__in=im_following)
+        qs2 = Tweet.objects.filter(user=self.request.user)
+        qs = (qs1 | qs2)
+        return qs
 
     def get_context_data(self, *args, **kwargs):
         context = super(TweetListView, self).get_context_data(*args, **kwargs)
