@@ -9,6 +9,7 @@ class TweetModelSerializer(serializers.ModelSerializer):
     user = UserDisplaySerializer()
     timesince = serializers.SerializerMethodField()
     date_display = serializers.SerializerMethodField()
+
     class Meta:
         model = Tweet
         fields = [

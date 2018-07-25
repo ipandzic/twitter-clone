@@ -22,8 +22,6 @@ from django.conf.urls.static import static
 from accounts.views import UserRegisterView
 from tweets.views import TweetListView
 
-from .views import home
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', TweetListView.as_view(), name='home'),
