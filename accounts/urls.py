@@ -1,10 +1,7 @@
-from django.conf.urls import url, include
+from django.conf.urls import include, url
 from django.views.generic.base import RedirectView
-from .views import (
-    UserDetailView,
-    UserFollowView
-    )
 
+from .views import UserDetailView, UserFollowView
 
 urlpatterns = [
     url(r'^(?P<username>[\w.@+-]+)/$', UserDetailView.as_view(), name='detail'),

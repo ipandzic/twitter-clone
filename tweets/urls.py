@@ -1,14 +1,8 @@
 from django.conf.urls import url
 from django.views.generic.base import RedirectView
-from .views import (
-    PublicTweetListView,
-    TweetCreateView,
-    TweetDeleteView,
-    TweetDetailView,
-    TweetListView,
-    TweetUpdateView
-    )
 
+from .views import (PublicTweetListView, TweetCreateView, TweetDeleteView,
+                    TweetDetailView, TweetListView, TweetUpdateView)
 
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url="/")),
