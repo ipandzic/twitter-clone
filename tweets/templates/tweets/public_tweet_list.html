@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 
@@ -11,15 +12,7 @@
         </div>
         <div class ="col-sm-9 col-sm-offest-3">
             <div>
-            {% if not request.GET.get.q %}
-
-
-            {% include "tweets/form.html" with form=create_form action_url=create_url btn_title="Tweet" %}
-                
-            </div>
-            <hr/>
-
-            {% endif %}
+ 
             {% for object in object_list %}
 
             <div class="media">
@@ -29,7 +22,7 @@
               <div class="media-body">
                 <h4 class="media-heading">{{ object.content }}</h4>
 
-                Tweet by: <a href="profiles/{{ object.user }}">{{ object.user }}</a><br/>
+                Tweet by: {{ object.user }}<br/>
                 Tweet time: {{ object.timestamp }}
                 | <a href="{{ object.get_absolute_url }}">View</a>
                 </p>

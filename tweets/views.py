@@ -38,7 +38,7 @@ class TweetListView(LoginRequiredMixin, ListView):
 
 class PublicTweetListView(ListView):
     queryset = Tweet.objects.all()
-    template_name = "tweets/tweet_list.html"
+    template_name = "tweets/public_tweet_list.html"
 
 
 class TweetUpdateView(LoginRequiredMixin, UserOwnerMixin, UpdateView):
